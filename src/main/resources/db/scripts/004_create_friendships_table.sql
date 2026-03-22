@@ -1,7 +1,7 @@
 -- Таблица для дружбы (взаимные подписки)
 CREATE TABLE IF NOT EXISTS friendships
 (
-     id INT PRIMARY KEY,
+     id BIGSERIAL PRIMARY KEY,
      user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
      friend_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

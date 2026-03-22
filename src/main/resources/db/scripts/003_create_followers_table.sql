@@ -1,7 +1,7 @@
 -- Таблица для подписок
 CREATE TABLE IF NOT EXISTS followers
 (
-    id INT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     follower_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     target_user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     status VARCHAR(20) NOT NULL DEFAULT 'pending',
