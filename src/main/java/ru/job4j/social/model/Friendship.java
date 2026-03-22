@@ -11,7 +11,15 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "friendships")
+@Table(
+    name = "friendships",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "unique_friendship",
+            columnNames = {"user_id", "friend_id"}
+        )
+    }
+)
 public class Friendship {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +44,8 @@ public class Friendship {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        if (user != null && friend != null && user.getId().equals(friend.getId())) {
+            throw new IllegalArgumentException("Нельзя добавить в друзья самого себя");
+        }
     }
 }

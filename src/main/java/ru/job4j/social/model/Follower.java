@@ -11,7 +11,15 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "followers")
+@Table(
+    name = "followers",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "unique_follower",
+            columnNames = {"follower_id", "target_user_id"}
+        )
+    }
+)
 public class Follower {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +45,7 @@ public class Follower {
         this.targetUser = targetUser;
     }
 
-    private enum FollowStatus {
+    public static enum FollowStatus {
         pending,
         accepted,
         rejected
@@ -47,5 +55,15 @@ public class Follower {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         status = FollowStatus.pending;
+        if (follower != null && targetUser != null && follower.getId().equals(targetUser.getId())) {
+            throw new IllegalArgumentException("Нельзя подписаться на самого себя");
+        }
+    }
+
+    @PreUpdate
+    private void validate() {
+        if (follower != null && targetUser != null && follower.getId().equals(targetUser.getId())) {
+            throw new IllegalArgumentException("Нельзя подписаться на самого себя");
+        }
     }
 }

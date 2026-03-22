@@ -47,6 +47,9 @@ public class Message {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         isRead = false;
+        if (sender != null && receiver != null && sender.getId().equals(receiver.getId())) {
+            throw new IllegalArgumentException("Нельзя отправить сообщение самому себе");
+        }
     }
 
     @PreUpdate
