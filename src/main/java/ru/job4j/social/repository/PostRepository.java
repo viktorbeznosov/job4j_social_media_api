@@ -1,6 +1,10 @@
 package ru.job4j.social.repository;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.social.model.Post;
 import ru.job4j.social.model.User;
 
@@ -16,4 +20,41 @@ public interface PostRepository extends CrudRepository<Post, Long> {
     List<Post> findByCreatedAtBetween(LocalDateTime dateFrom, LocalDateTime dateTo);
 
     List<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    @Query("""
+        SELECT p FROM Post p
+        JOIN Follower f ON p.user.id = f.targetUser.id
+        WHERE f.follower.id = :followerId
+        ORDER BY p.createdAt DESC
+    """)
+    List<Post> getAllPostsOfTargetUsers(
+        @Param("followerId") Long followerId,
+        Pageable pageable
+    );
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query("""
+            update Post post 
+            set post.title = :title, post.text = :text
+            where post.id = :id
+            """)
+    void update(@Param("id") Long id, @Param("title") String title, @Param("text") String text);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query("""
+            update Post post 
+            set post.photo = NULL 
+            where post.id = :id
+            """)
+    void deleteImage(@Param("id") Long id);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = """
+            DELETE FROM posts
+            WHERE id = :id
+            """, nativeQuery = true)
+    int delete(@Param("id") Long id);
 }
