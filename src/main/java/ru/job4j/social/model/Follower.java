@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -49,6 +49,66 @@ public class Follower {
         pending,
         accepted,
         rejected
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getFollower() {
+        return follower;
+    }
+
+    public void setFollower(User follower) {
+        this.follower = follower;
+    }
+
+    public User getTargetUser() {
+        return targetUser;
+    }
+
+    public void setTargetUser(User targetUser) {
+        this.targetUser = targetUser;
+    }
+
+    public FollowStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(FollowStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Follower follower1 = (Follower) o;
+        return Objects.equals(id, follower1.id)
+                && Objects.equals(follower.getId(), follower1.follower.getId())
+                && Objects.equals(targetUser.getId(), follower1.targetUser.getId())
+                && status == follower1.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, follower.getId(), targetUser.getId(), status);
     }
 
     @PrePersist

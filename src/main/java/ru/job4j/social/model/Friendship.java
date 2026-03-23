@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,9 +36,60 @@ public class Friendship {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getFriend() {
+        return friend;
+    }
+
+    public void setFriend(User friend) {
+        this.friend = friend;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public Friendship(User user, User friend) {
         this.user = user;
         this.friend = friend;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Friendship that = (Friendship) o;
+        return Objects.equals(id, that.id)
+                && Objects.equals(user.getId(), that.user.getId())
+                && Objects.equals(friend.getId(), that.friend.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, user, friend);
     }
 
     @PrePersist
