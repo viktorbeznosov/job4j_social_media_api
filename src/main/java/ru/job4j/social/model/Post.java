@@ -111,8 +111,7 @@ public class Post {
         Post post = (Post) o;
         return Objects.equals(id, post.id)
                 && Objects.equals(user.getId(), post.user.getId())
-                && Objects.equals(title, post.title)
-                && Objects.equals(text, post.text);
+                && Objects.equals(title, post.title);
     }
 
     @Override

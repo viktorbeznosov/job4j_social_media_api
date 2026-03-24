@@ -109,10 +109,7 @@ public class Message {
             return false;
         }
         Message message = (Message) o;
-        return isRead == message.isRead
-                && Objects.equals(id, message.id)
-                && Objects.equals(sender.getId(), message.sender.getId())
-                && Objects.equals(receiver.getId(), message.receiver.getId())
+        return Objects.equals(id, message.id)
                 && Objects.equals(text, message.text);
     }
 
