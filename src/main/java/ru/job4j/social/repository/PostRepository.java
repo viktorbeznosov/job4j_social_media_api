@@ -23,8 +23,8 @@ public interface PostRepository extends CrudRepository<Post, Long> {
 
     @Query("""
         SELECT p FROM Post p
-        JOIN Follower f ON p.user.id = f.targetUser.id
-        WHERE f.follower.id = :followerId
+        JOIN Subscribe s ON p.user.id = s.targetUser.id
+        WHERE s.follower.id = :followerId AND s.status = 'accepted'
         ORDER BY p.createdAt DESC
     """)
     List<Post> getAllPostsOfTargetUsers(

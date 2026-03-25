@@ -2,7 +2,6 @@ package ru.job4j.social.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -12,7 +11,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(
-    name = "followers",
+    name = "subscribes",
     uniqueConstraints = {
         @UniqueConstraint(
             name = "unique_follower",
@@ -20,7 +19,7 @@ import java.util.Objects;
         )
     }
 )
-public class Follower {
+public class Subscribe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,17 +34,17 @@ public class Follower {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private FollowStatus status;
+    private SubscribeStatus status;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public Follower(User follower, User targetUser) {
+    public Subscribe(User follower, User targetUser) {
         this.follower = follower;
         this.targetUser = targetUser;
     }
 
-    public static enum FollowStatus {
+    public static enum SubscribeStatus {
         pending,
         accepted,
         rejected
@@ -75,11 +74,11 @@ public class Follower {
         this.targetUser = targetUser;
     }
 
-    public FollowStatus getStatus() {
+    public SubscribeStatus getStatus() {
         return status;
     }
 
-    public void setStatus(FollowStatus status) {
+    public void setStatus(SubscribeStatus status) {
         this.status = status;
     }
 
@@ -99,11 +98,11 @@ public class Follower {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Follower follower1 = (Follower) o;
-        return Objects.equals(id, follower1.id)
-                && Objects.equals(follower.getId(), follower1.follower.getId())
-                && Objects.equals(targetUser.getId(), follower1.targetUser.getId())
-                && status == follower1.status;
+        Subscribe subscribe1 = (Subscribe) o;
+        return Objects.equals(id, subscribe1.id)
+                && Objects.equals(follower.getId(), subscribe1.follower.getId())
+                && Objects.equals(targetUser.getId(), subscribe1.targetUser.getId())
+                && status == subscribe1.status;
     }
 
     @Override
@@ -114,7 +113,7 @@ public class Follower {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        status = FollowStatus.pending;
+        status = SubscribeStatus.pending;
         if (follower != null && targetUser != null && follower.getId().equals(targetUser.getId())) {
             throw new IllegalArgumentException("Нельзя подписаться на самого себя");
         }

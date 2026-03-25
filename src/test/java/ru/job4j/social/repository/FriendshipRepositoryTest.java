@@ -22,7 +22,7 @@ class FriendshipRepositoryTest {
     private UserRepository userRepository;
 
     @Autowired
-    private FollowerRepository followerRepository;
+    private SubscribeRepository subscribeRepository;
 
     @Autowired
     private PostRepository postRepository;
@@ -36,7 +36,7 @@ class FriendshipRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        followerRepository.deleteAll();
+        subscribeRepository.deleteAll();
         friendshipRepository.deleteAll();
         messageRepository.deleteAll();
         postRepository.deleteAll();

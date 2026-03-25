@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
-import ru.job4j.social.model.Follower;
+import ru.job4j.social.model.Subscribe;
 import ru.job4j.social.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,12 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class FollowerRepositoryTest {
+class SubscribeRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private FollowerRepository followerRepository;
+    private SubscribeRepository subscribeRepository;
 
     @Autowired
     private PostRepository postRepository;
@@ -35,7 +35,7 @@ class FollowerRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        followerRepository.deleteAll();
+        subscribeRepository.deleteAll();
         friendshipRepository.deleteAll();
         messageRepository.deleteAll();
         postRepository.deleteAll();
@@ -46,16 +46,16 @@ class FollowerRepositoryTest {
     public void whenCreateFollower() {
         User targetUser = new User("Test user", "user@mail.ru",  "12345");
         User followerUser = new User("Follower", "follower@mail.ru", "12345");
-        Follower follower = new Follower(followerUser, targetUser);
+        Subscribe subscribe = new Subscribe(followerUser, targetUser);
         userRepository.save(targetUser);
         userRepository.save(followerUser);
-        followerRepository.save(follower);
+        subscribeRepository.save(subscribe);
 
-        var foundFollower = followerRepository.findById(follower.getId());
+        var foundFollower = subscribeRepository.findById(subscribe.getId());
 
         assertThat(foundFollower).isPresent();
         assertThat(foundFollower.get().getFollower().getId()).isEqualTo(followerUser.getId());
-        assertThat(foundFollower.get().getStatus()).isEqualTo(Follower.FollowStatus.pending);
+        assertThat(foundFollower.get().getStatus()).isEqualTo(Subscribe.SubscribeStatus.pending);
         assertThat(foundFollower.get().getTargetUser().getId()).isEqualTo(targetUser.getId());
     }
 
@@ -64,12 +64,12 @@ class FollowerRepositoryTest {
         User sameUser = new User("Same User", "same@mail.ru", "12345");
         userRepository.save(sameUser);
 
-        Follower follower = new Follower(sameUser, sameUser);
+        Subscribe subscribe = new Subscribe(sameUser, sameUser);
 
         // Ожидаем InvalidDataAccessApiUsageException, который оборачивает IllegalArgumentException
         InvalidDataAccessApiUsageException exception = assertThrows(
                 InvalidDataAccessApiUsageException.class,
-                () -> followerRepository.save(follower)
+                () -> subscribeRepository.save(subscribe)
         );
 
         // Проверяем сообщение исключения

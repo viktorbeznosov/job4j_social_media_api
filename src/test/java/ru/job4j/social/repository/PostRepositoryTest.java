@@ -11,7 +11,6 @@ import ru.job4j.social.model.User;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -22,7 +21,7 @@ class PostRepositoryTest {
     private UserRepository userRepository;
 
     @Autowired
-    private FollowerRepository followerRepository;
+    private SubscribeRepository subscribeRepository;
 
     @Autowired
     private PostRepository postRepository;
@@ -36,7 +35,7 @@ class PostRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        followerRepository.deleteAll();
+        subscribeRepository.deleteAll();
         friendshipRepository.deleteAll();
         messageRepository.deleteAll();
         postRepository.deleteAll();
