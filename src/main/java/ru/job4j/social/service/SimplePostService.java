@@ -1,10 +1,12 @@
 package ru.job4j.social.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.job4j.social.model.Post;
 import ru.job4j.social.model.User;
 import ru.job4j.social.repository.PostRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SimplePostService implements PostService {
@@ -15,9 +17,22 @@ public class SimplePostService implements PostService {
         this.postRepository = postRepository;
     }
 
+    public Optional<Post> findById(Long id) {
+        return postRepository.findById(id);
+    }
+
+    public List<Post> findAll() {
+        return (List<Post>) postRepository.findAll();
+    }
+
     @Override
     public void create(User user, String title, String text, String photo) {
         Post post = new Post(user, title, text, photo);
+        postRepository.save(post);
+    }
+
+    @Override
+    public void create(Post post) {
         postRepository.save(post);
     }
 
@@ -34,7 +49,12 @@ public class SimplePostService implements PostService {
     }
 
     @Override
-    public void delete(Long id) {
-        postRepository.delete(id);
+    public boolean update(Post post) {
+        return postRepository.update(post) > 0L;
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        return postRepository.delete(id) > 0L;
     }
 }

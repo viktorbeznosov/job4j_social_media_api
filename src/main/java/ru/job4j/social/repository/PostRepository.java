@@ -36,10 +36,22 @@ public interface PostRepository extends CrudRepository<Post, Long> {
     @Transactional
     @Query("""
             update Post post 
-            set post.title = :title, post.text = :text
+            set post.title = :title, 
+            post.text = :text,
+            post.photo = :photo,
+            post.updatedAt = CURRENT_TIMESTAMP
             where post.id = :id
             """)
-    void update(@Param("id") Long id, @Param("title") String title, @Param("text") String text);
+    int update(@Param("id") Long id, @Param("title") String title, @Param("text") String text, @Param("photo") String photo);
+
+    @Transactional
+    @Modifying
+    default int update(Post post) {
+        return update(post.getId(),
+                post.getTitle(),
+                post.getText(),
+                post.getPhoto());
+    }
 
     @Modifying(clearAutomatically = true)
     @Transactional
