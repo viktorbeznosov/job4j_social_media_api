@@ -1,5 +1,6 @@
 package ru.job4j.social.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user) {
+    public ResponseEntity<User> save(@Valid @RequestBody User user) {
         userService.save(user);
         var uri = ServletUriComponentsBuilder
             .fromCurrentRequest()

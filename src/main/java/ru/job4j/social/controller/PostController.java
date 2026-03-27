@@ -1,5 +1,6 @@
 package ru.job4j.social.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -42,7 +43,7 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Post> save(@RequestBody Post post) {
+    public ResponseEntity<Post> save(@Valid @RequestBody Post post) {
         postService.create(post);
         var uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()

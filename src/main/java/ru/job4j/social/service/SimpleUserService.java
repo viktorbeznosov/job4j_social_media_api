@@ -1,6 +1,7 @@
 package ru.job4j.social.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.social.model.User;
 import ru.job4j.social.repository.UserRepository;
 
@@ -27,6 +28,7 @@ public class SimpleUserService implements UserService {
         return userRepository.findById(id);
     }
 
+    @Transactional
     public boolean deleteById(Long id) {
         return userRepository.delete(id) > 0L;
     }

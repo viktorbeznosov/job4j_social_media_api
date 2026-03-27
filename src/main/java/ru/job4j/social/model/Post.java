@@ -1,14 +1,13 @@
 package ru.job4j.social.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +21,7 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @NotBlank(message = "Название не божет быть пустым")
     @Column(name = "title", length = 255, nullable = false)
     private String title;
 

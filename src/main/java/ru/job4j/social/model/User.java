@@ -1,6 +1,8 @@
 package ru.job4j.social.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,12 +19,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Имя пользователя не может быть пустым")
     @Column(name = "full_name", length = 100, nullable = false)
     private String fullName;
 
-    @Column(name = "email", length = 100, nullable = false)
+    @NotBlank(message = "Email не может быть пустым")
+    @Email(message = "Некорректный формат email")
+    @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "Пароль не может быть пустым")
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
