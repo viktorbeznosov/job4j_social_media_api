@@ -1,5 +1,6 @@
 package ru.job4j.social.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ import java.util.Objects;
         )
     }
 )
+@Schema(description = "Friendship Model Information")
 public class Friendship {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

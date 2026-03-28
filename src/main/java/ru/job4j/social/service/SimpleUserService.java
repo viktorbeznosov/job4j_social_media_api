@@ -27,11 +27,31 @@ public class SimpleUserService implements UserService {
     }
 
     public boolean update(User user) {
-        return userRepository.update(user) > 0L;
+        User existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
+
+        if (user.getFullName() != null) {
+            existingUser.setFullName(user.getFullName());
+        }
+        if (user.getEmail() != null) {
+            existingUser.setEmail(user.getEmail());
+        }
+        if (user.getPassword() != null) {
+            existingUser.setPassword(user.getPassword());
+        }
+
+        userRepository.save(existingUser);
+        return true;
     }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public Optional<UserWithPostsDto> findById(Long id) {
+        var user = userRepository.findById(id);
+        UserWithPostsDto result = null;
+        if (user.isPresent()) {
+            result = userWithPostsMapper.getModelFromEntity(user.get());
+        }
+
+        return Optional.of(result);
     }
 
     @Transactional
@@ -39,8 +59,13 @@ public class SimpleUserService implements UserService {
         return userRepository.delete(id) > 0L;
     }
 
-    public List<User> findAll() {
-        return (List<User>) userRepository.findAll();
+    public List<UserWithPostsDto> findAll() {
+        List<User> users = (List<User>) userRepository.findAll();
+
+        return users
+            .stream()
+            .map(userWithPostsMapper::getModelFromEntity)
+            .collect(Collectors.toList());
     }
 
     public List<UserWithPostsDto> findUsersWithPostsByUserIds(List<Long> userIds) {

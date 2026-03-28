@@ -11,11 +11,11 @@ public interface UserService {
 
     public boolean update(User user);
 
-    public Optional<User> findById(Long id);
+    public Optional<UserWithPostsDto> findById(Long id);
 
     public boolean deleteById(Long id);
 
-    public List<User> findAll();
+    public List<UserWithPostsDto> findAll();
 
     public List<UserWithPostsDto> findUsersWithPostsByUserIds(List<Long> userIds);
 }

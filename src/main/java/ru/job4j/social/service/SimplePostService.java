@@ -1,28 +1,44 @@
 package ru.job4j.social.service;
 
 import org.springframework.stereotype.Service;
+import ru.job4j.social.dto.PostDto;
+import ru.job4j.social.mappers.PostMapper;
 import ru.job4j.social.model.Post;
 import ru.job4j.social.model.User;
 import ru.job4j.social.repository.PostRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SimplePostService implements PostService {
 
     private final PostRepository postRepository;
 
-    public SimplePostService(PostRepository postRepository) {
+    private final PostMapper postMapper;
+
+    public SimplePostService(PostRepository postRepository, PostMapper postMapper) {
         this.postRepository = postRepository;
+        this.postMapper = postMapper;
     }
 
-    public Optional<Post> findById(Long id) {
-        return postRepository.findById(id);
+    public Optional<PostDto> findById(Long id) {
+        var post = postRepository.findById(id);
+        PostDto result = null;
+        if (post.isPresent()) {
+            result = postMapper.getModelFromEntity(post.get());
+        }
+        return Optional.of(result);
     }
 
-    public List<Post> findAll() {
-        return (List<Post>) postRepository.findAll();
+    public List<PostDto> findAll() {
+        List<Post> posts = (List<Post>) postRepository.findAll();
+
+        return posts
+            .stream()
+            .map(postMapper::getModelFromEntity)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -50,7 +66,23 @@ public class SimplePostService implements PostService {
 
     @Override
     public boolean update(Post post) {
-        return postRepository.update(post) > 0L;
+        Post existingPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Пост не найден"));
+
+        if (post.getTitle() != null) {
+            existingPost.setTitle(post.getTitle());
+        }
+
+        if (post.getText() != null) {
+            existingPost.setText(post.getText());
+        }
+
+        if (post.getPhoto() != null) {
+            existingPost.setPhoto(post.getPhoto());
+        }
+
+        postRepository.save(existingPost);
+        return true;
     }
 
     @Override

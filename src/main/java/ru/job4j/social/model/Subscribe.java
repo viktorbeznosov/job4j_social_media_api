@@ -1,5 +1,6 @@
 package ru.job4j.social.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Objects;
         )
     }
 )
+@Schema(description = "Subscribe Model Information")
 public class Subscribe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

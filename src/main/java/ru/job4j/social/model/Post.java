@@ -1,5 +1,6 @@
 package ru.job4j.social.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "posts")
+@Schema(description = "Post Model Information")
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +24,7 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @NotBlank(message = "Название не божет быть пустым")
+    @NotBlank(message = "Название не может быть пустым")
     @Column(name = "title", length = 255, nullable = false)
     private String title;
 
@@ -44,6 +47,7 @@ public class Post {
         this.photo = photo;
     }
 
+    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }
@@ -58,6 +62,11 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    // Вспомогательный метод для получения userId
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
     }
 
     public String getTitle() {
@@ -102,16 +111,12 @@ public class Post {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return Objects.equals(id, post.id)
-                && Objects.equals(user.getId(), post.user.getId())
-                && Objects.equals(title, post.title);
+        return Objects.equals(id, post.id) &&
+                Objects.equals(user, post.user) &&
+                Objects.equals(title, post.title);
     }
 
     @Override

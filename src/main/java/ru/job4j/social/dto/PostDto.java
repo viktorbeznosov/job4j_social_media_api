@@ -1,5 +1,6 @@
 package ru.job4j.social.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Post Dto Information")
 public class PostDto {
 
     @NotBlank(message = "Id  может быть пустым")
@@ -18,6 +20,8 @@ public class PostDto {
     private String text;
 
     private String photo;
+
+    private UserDto user;
 
     private LocalDateTime createdAt;
 
@@ -51,6 +55,14 @@ public class PostDto {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    public UserDto getUser() {
+        return user;
+    }
+
+    public void setUser(UserDto user) {
+        this.user = user;
     }
 
     public LocalDateTime getCreatedAt() {

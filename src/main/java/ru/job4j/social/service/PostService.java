@@ -1,5 +1,6 @@
 package ru.job4j.social.service;
 
+import ru.job4j.social.dto.PostDto;
 import ru.job4j.social.model.Post;
 import ru.job4j.social.model.User;
 
@@ -7,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostService {
-    public Optional<Post> findById(Long id);
+    public Optional<PostDto> findById(Long id);
 
-    public List<Post> findAll();
+    public List<PostDto> findAll();
 
     public void create(User user, String title, String text, String photo);
 

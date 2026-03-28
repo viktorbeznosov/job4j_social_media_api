@@ -1,5 +1,6 @@
 package ru.job4j.social.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "messages")
+@Schema(description = "Message Model Information")
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
