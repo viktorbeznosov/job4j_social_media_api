@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.job4j.social.dto.UserWithPostsDto;
 import ru.job4j.social.model.User;
 import ru.job4j.social.service.UserService;
 
@@ -26,6 +27,15 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> getList() {
         List<User> users = userService.findAll();
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/getByIds")
+    public ResponseEntity<List<UserWithPostsDto>> getUsersWithPostsByIds(
+        @RequestParam("ids") List<Long> ids
+    ) {
+        log.info("Getting users by ids: {}", ids);
+        List<UserWithPostsDto> users = userService.findUsersWithPostsByUserIds(ids);
         return ResponseEntity.ok(users);
     }
 

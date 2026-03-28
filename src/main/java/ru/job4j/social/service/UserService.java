@@ -1,5 +1,6 @@
 package ru.job4j.social.service;
 
+import ru.job4j.social.dto.UserWithPostsDto;
 import ru.job4j.social.model.User;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface UserService {
     public boolean deleteById(Long id);
 
     public List<User> findAll();
+
+    public List<UserWithPostsDto> findUsersWithPostsByUserIds(List<Long> userIds);
 }
