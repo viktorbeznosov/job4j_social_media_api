@@ -1,5 +1,6 @@
 package ru.job4j.social.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,8 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class UserWithPostsDto {
+    @NotBlank(message = "Id  может быть пустым")
     private Long userId;
 
+    @NotBlank(message = "userName не может быть пустым")
     private String userName;
 
     private List<PostDto> posts;

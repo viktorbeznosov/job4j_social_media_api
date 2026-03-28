@@ -1,17 +1,24 @@
 package ru.job4j.social.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDto {
+
+    @NotBlank(message = "Id  может быть пустым")
     private Long id;
+
+    @NotBlank(message = "Текст поста не может быть пустым")
     private String title;
+
     private String text;
+
     private String photo;
+
     private LocalDateTime createdAt;
 
     public Long getId() {

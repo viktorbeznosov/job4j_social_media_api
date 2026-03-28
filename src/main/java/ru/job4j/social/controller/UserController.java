@@ -1,6 +1,7 @@
 package ru.job4j.social.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -32,9 +33,10 @@ public class UserController {
 
     @GetMapping("/getByIds")
     public ResponseEntity<List<UserWithPostsDto>> getUsersWithPostsByIds(
-        @RequestParam("ids") List<Long> ids
+        @RequestParam("ids")
+        @NotEmpty(message = "Список ID не может быть пустым")
+        List<@Min(value = 1, message = "ID должен быть больше 0")Long> ids
     ) {
-        log.info("Getting users by ids: {}", ids);
         List<UserWithPostsDto> users = userService.findUsersWithPostsByUserIds(ids);
         return ResponseEntity.ok(users);
     }

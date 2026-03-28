@@ -1,6 +1,7 @@
 package ru.job4j.social.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class Message {
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
+    @NotBlank(message = "Текст сообщеняи не может быть пустым")
     @Column(name = "text", nullable = false)
     private String text;
 
