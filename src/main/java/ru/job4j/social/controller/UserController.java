@@ -12,18 +12,22 @@ import lombok.AllArgsConstructor;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.control.MappingControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.job4j.social.dto.UserWithPostsDto;
-import ru.job4j.social.dto.swagger.CreateUserRequest;
-import ru.job4j.social.dto.swagger.PatchUpdateUserRequest;
-import ru.job4j.social.dto.swagger.PutUpdateUserRequest;
+import ru.job4j.social.dto.request.CreateUserRequest;
+import ru.job4j.social.dto.request.PatchUpdateUserRequest;
+import ru.job4j.social.dto.request.PutUpdateUserRequest;
+import ru.job4j.social.model.ERole;
 import ru.job4j.social.model.User;
 import ru.job4j.social.service.UserService;
+import ru.job4j.social.userdetails.UserDetailsImpl;
 
 import java.util.List;
 
@@ -48,6 +52,7 @@ public class UserController {
         @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema())})
     })
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserWithPostsDto>> getList() {
         List<UserWithPostsDto> users = userService.findAll();
         return ResponseEntity.ok(users);
@@ -86,6 +91,7 @@ public class UserController {
             content = @Content)
     })
     @GetMapping("/{userId}")
+    @PreAuthorize("@userSecurity.isCurrentUser(#p0) or hasRole('ADMIN')")
     public ResponseEntity<UserWithPostsDto> get(
         @PathVariable("userId")
         @NotNull
@@ -109,6 +115,7 @@ public class UserController {
             content = @Content)
     })
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> save(@Valid @RequestBody CreateUserRequest createUserRequest) {
         User user = createUserRequest.getUser();
         userService.save(user);
@@ -136,7 +143,10 @@ public class UserController {
             content = @Content)
     })
     @PutMapping
-    public ResponseEntity<Void> update(@Valid @RequestBody PutUpdateUserRequest updateUserRequest) {
+    @PreAuthorize("@userSecurity.isCurrentUser(#p0.user.id) or hasRole('ADMIN')")
+    public ResponseEntity<Void> update(
+            @Valid @RequestBody PutUpdateUserRequest updateUserRequest
+    ) {
         User user = updateUserRequest.getUser();
         if (userService.update(user)){
             return ResponseEntity.ok().build();
@@ -159,7 +169,10 @@ public class UserController {
     })
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
-    public void change(@Valid @RequestBody PatchUpdateUserRequest updateUserRequest) {
+    @PreAuthorize("@userSecurity.isCurrentUser(#p0.user.id) or hasRole('ADMIN')")
+    public void change(
+        @Valid @RequestBody PatchUpdateUserRequest updateUserRequest
+    ) {
         User user = updateUserRequest.getUser();
         userService.update(user);
     }
@@ -178,6 +191,7 @@ public class UserController {
             content = @Content)
     })
     @DeleteMapping("/{userId}")
+    @PreAuthorize("@userSecurity.isCurrentUser(#p0) or hasRole('ADMIN')")
     public ResponseEntity<Void> removeById(
         @PathVariable("userId")
         @NotNull

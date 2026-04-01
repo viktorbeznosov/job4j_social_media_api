@@ -46,6 +46,7 @@ class UserRepositoryTest {
     public void whenSaveUserThenFindById() {
         User user = new User();
         user.setFullName("User");
+        user.setUsername("user");
         user.setEmail("user@mail.ru");
         user.setPassword("12345");
         userRepository.save(user);
@@ -58,10 +59,12 @@ class UserRepositoryTest {
     public void whenFindAllUsers() {
         User user1 = new User();
         user1.setFullName("Jane");
+        user1.setUsername("jane");
         user1.setEmail("jane@mail.ru");
         user1.setPassword("12345");
         User user2 = new User();
         user2.setFullName("John");
+        user2.setUsername("john");
         user2.setEmail("john@mail.ru");
         user2.setPassword("12345");
 

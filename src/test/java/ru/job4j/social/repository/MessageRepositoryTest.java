@@ -44,8 +44,8 @@ class MessageRepositoryTest {
 
     @Test
     public void whenCreateMessageThenSuccess() {
-        User sender = new User("Sender", "sender@mail.ru", "12345");
-        User receiver = new User("Receiver", "receiver@mail.ru", "12345");
+        User sender = new User("Sender", "sender", "sender@mail.ru", "12345");
+        User receiver = new User("Receiver", "receiver",  "receiver@mail.ru", "12345");
 
         userRepository.save(sender);
         userRepository.save(receiver);
@@ -69,7 +69,7 @@ class MessageRepositoryTest {
 
     @Test
     public void whenSendMessageToYourselfThenException() {
-        User sameUser = new User("Same User", "same@mail.ru", "12345");
+        User sameUser = new User("Same User",  "sameUser", "same@mail.ru", "12345");
         userRepository.save(sameUser);
 
         Message message = new Message();

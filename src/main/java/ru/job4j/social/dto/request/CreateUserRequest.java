@@ -1,26 +1,13 @@
-package ru.job4j.social.dto.swagger;
+package ru.job4j.social.dto.request;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import ru.job4j.social.model.User;
 
-@Schema(description = "Запрос на полное изменение пользователя")
-public class PutUpdateUserRequest {
-
-    @Schema(
-            description = "Id пользователя",
-            example = "1",
-            requiredMode = Schema.RequiredMode.REQUIRED,
-            minLength = 1,
-            maxLength = 100,
-            minimum = "1"
-    )
-    @NotNull(message = "Id пользователя не может быть пустым")
-    private Long id;
-
+@Schema(description = "Запрос на создание пользователя")
+public class CreateUserRequest {
     @Schema(
             description = "Полное имя пользователя",
             example = "Иван Петров",
@@ -30,6 +17,16 @@ public class PutUpdateUserRequest {
     )
     @NotBlank(message = "Имя пользователя не может быть пустым")
     private String fullName;
+
+    @Schema(
+            description = "Логин пользователя",
+            example = "testuser",
+            requiredMode = Schema.RequiredMode.REQUIRED,
+            minLength = 5,
+            maxLength = 100
+    )
+    @NotBlank(message = "username не может быть пустым")
+    private String username;
 
     @Schema(
             description = "Email пользователя",
@@ -60,6 +57,14 @@ public class PutUpdateUserRequest {
         this.fullName = fullName;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -76,19 +81,9 @@ public class PutUpdateUserRequest {
         this.password = password;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Hidden
     public User getUser() {
         User user = new User();
-        user.setId(this.id);
         user.setFullName(this.fullName);
         user.setEmail(this.email);
         user.setPassword(this.password);

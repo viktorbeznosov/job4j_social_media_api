@@ -25,6 +25,7 @@ public class SimplePostService implements PostService {
 
     public Optional<PostDto> findById(Long id) {
         var post = postRepository.findById(id);
+
         PostDto result = null;
         if (post.isPresent()) {
             result = postMapper.getModelFromEntity(post.get());

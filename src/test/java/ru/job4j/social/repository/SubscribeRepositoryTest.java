@@ -44,8 +44,8 @@ class SubscribeRepositoryTest {
 
     @Test
     public void whenCreateFollower() {
-        User targetUser = new User("Test user", "user@mail.ru",  "12345");
-        User followerUser = new User("Follower", "follower@mail.ru", "12345");
+        User targetUser = new User("Test user", "testUser", "user@mail.ru",  "12345");
+        User followerUser = new User("Follower", "follower", "follower@mail.ru", "12345");
         Subscribe subscribe = new Subscribe(followerUser, targetUser);
         userRepository.save(targetUser);
         userRepository.save(followerUser);
@@ -61,7 +61,7 @@ class SubscribeRepositoryTest {
 
     @Test
     public void whenFollowerTheSameTarget() {
-        User sameUser = new User("Same User", "same@mail.ru", "12345");
+        User sameUser = new User("Same User", "sameUser",  "same@mail.ru", "12345");
         userRepository.save(sameUser);
 
         Subscribe subscribe = new Subscribe(sameUser, sameUser);

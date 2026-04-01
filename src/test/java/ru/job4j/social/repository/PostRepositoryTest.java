@@ -46,6 +46,7 @@ class PostRepositoryTest {
     public void whenCreatePost() {
         User user = new User();
         user.setFullName("Test user");
+        user.setUsername("testUser");
         user.setEmail("test@mail.ru");
         user.setPassword("12345");
         userRepository.save(user);
@@ -67,6 +68,7 @@ class PostRepositoryTest {
     public void whenCreateManyPosts() {
         User user = new User();
         user.setFullName("Test user");
+        user.setUsername("testUser");
         user.setEmail("test@mail.ru");
         user.setPassword("12345");
         userRepository.save(user);

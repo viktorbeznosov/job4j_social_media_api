@@ -13,15 +13,20 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.job4j.social.dto.PostDto;
-import ru.job4j.social.dto.swagger.CreatePostRequest;
-import ru.job4j.social.dto.swagger.PatchUpdatePostRequest;
-import ru.job4j.social.dto.swagger.PutUpdatePostRequest;
+import ru.job4j.social.dto.request.CreatePostRequest;
+import ru.job4j.social.dto.request.PatchUpdatePostRequest;
+import ru.job4j.social.dto.request.PutUpdatePostRequest;
+import ru.job4j.social.model.ERole;
 import ru.job4j.social.model.Post;
 import ru.job4j.social.service.PostService;
+import ru.job4j.social.userdetails.UserDetailsImpl;
 
 import java.util.List;
 
@@ -72,6 +77,7 @@ public class PostController {
             content = @Content)
     })
     @GetMapping("/{postId}")
+    @PreAuthorize("@postSecurity.isOwner(#p0) or hasRole('ADMIN') or hasRole('MORERATOR')")
     public ResponseEntity<PostDto> getById(
         @PathVariable("postId")
         @NotNull
@@ -98,17 +104,22 @@ public class PostController {
             content = @Content)
     })
     @PostMapping
-    public ResponseEntity<Post> save(@Valid @RequestBody CreatePostRequest createPostRequest) {
+    public ResponseEntity<Post> save(
+        @Valid @RequestBody CreatePostRequest createPostRequest,
+        @AuthenticationPrincipal UserDetailsImpl currentUser
+    ) {
         Post post = createPostRequest.getPost();
+        post.setUser(currentUser.getUser());
+
         postService.create(post);
         var uri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(post.getId())
-                .toUri();
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(post.getId())
+            .toUri();
         return ResponseEntity.status(HttpStatus.CREATED)
-                .location(uri)
-                .body(post);
+            .location(uri)
+            .body(post);
     }
 
     @Operation(
@@ -128,6 +139,7 @@ public class PostController {
             content = @Content)
     })
     @PutMapping
+    @PreAuthorize("@postSecurity.isOwner(#p0.post.id) or hasRole('ADMIN') or hasRole('MORERATOR')")
     public ResponseEntity<Void> update(@RequestBody PutUpdatePostRequest updatePostRequest) {
         Post post = updatePostRequest.getPost();
         if (postService.update(post)) {
@@ -154,6 +166,7 @@ public class PostController {
     })
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("@postSecurity.isOwner(#p0.post.id) or hasRole('ADMIN') or hasRole('MORERATOR')")
     public void change(@RequestBody PatchUpdatePostRequest updatePostRequest) {
         Post post = updatePostRequest.getPost();
         postService.update(post);
@@ -176,6 +189,7 @@ public class PostController {
             content = @Content)
     })
     @DeleteMapping("/{postId}")
+    @PreAuthorize("@postSecurity.isOwner(#p0) or hasRole('ADMIN') or hasRole('MORERATOR')")
     public ResponseEntity<Void> removeById(
         @PathVariable("postId")
         @NotNull

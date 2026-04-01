@@ -1,4 +1,4 @@
-package ru.job4j.social.dto.swagger;
+package ru.job4j.social.dto.request;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +29,15 @@ public class PatchUpdateUserRequest {
     private String fullName;
 
     @Schema(
+            description = "Логин пользователя",
+            example = "testuser",
+            requiredMode = Schema.RequiredMode.REQUIRED,
+            minLength = 5,
+            maxLength = 100
+    )
+    private String username;
+
+    @Schema(
             description = "Email пользователя",
             example = "ivan.petrov@example.com",
             requiredMode = Schema.RequiredMode.REQUIRED,
@@ -53,6 +62,14 @@ public class PatchUpdateUserRequest {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

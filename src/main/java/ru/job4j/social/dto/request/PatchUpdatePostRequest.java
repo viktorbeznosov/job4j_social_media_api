@@ -1,15 +1,12 @@
-package ru.job4j.social.dto.swagger;
+package ru.job4j.social.dto.request;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import ru.job4j.social.model.Post;
-import ru.job4j.social.model.User;
 
-@Schema(description = "Запрос на полное обновление поста")
-public class PutUpdatePostRequest {
-
+@Schema(description = "Запрос на частичное обновление поста")
+public class PatchUpdatePostRequest {
     @Schema(
             description = "Id поста",
             example = "1",
@@ -24,11 +21,10 @@ public class PutUpdatePostRequest {
     @Schema(
             description = "Пазвание поста",
             example = "Пост",
-            requiredMode = Schema.RequiredMode.REQUIRED,
+            requiredMode = Schema.RequiredMode.NOT_REQUIRED,
             minLength = 2,
             maxLength = 100
     )
-    @NotBlank(message = "Название поста не может быть пустым")
     private String title;
 
     @Schema(

@@ -46,8 +46,8 @@ class FriendshipRepositoryTest {
     @Test
     public void whenCreateFriendship() {
         // Создаем двух пользователей
-        User user1 = new User("User1", "user1@mail.ru", "12345");
-        User user2 = new User("User2", "user2@mail.ru", "12345");
+        User user1 = new User("User1", "user1", "user1@mail.ru", "12345");
+        User user2 = new User("User2", "user2", "user2@mail.ru", "12345");
 
         userRepository.save(user1);
         userRepository.save(user2);
@@ -66,8 +66,8 @@ class FriendshipRepositoryTest {
 
     @Test
     public void whenCreateDuplicateFriendshipThenException() {
-        User user1 = new User("User1", "user1@mail.ru", "12345");
-        User user2 = new User("User2", "user2@mail.ru", "12345");
+        User user1 = new User("User1",  "user1", "user1@mail.ru", "12345");
+        User user2 = new User("User2", "user2", "user2@mail.ru", "12345");
 
         userRepository.save(user1);
         userRepository.save(user2);
@@ -85,7 +85,7 @@ class FriendshipRepositoryTest {
 
     @Test
     public void whenFriendshipWithSameUserThenException() {
-        User sameUser = new User("Same User", "same@mail.ru", "12345");
+        User sameUser = new User("Same User", "sameUser", "same@mail.ru", "12345");
         userRepository.save(sameUser);
 
         Friendship friendship = new Friendship(sameUser, sameUser);
